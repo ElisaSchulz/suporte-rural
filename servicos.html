@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Serviços — Suporte Rural</title>
+  <link rel="stylesheet" href="sr_style.css"/>
+  <style>
+    /* ── SERVIÇOS GRID ── */
+    #servicos-list { padding:5.5rem 5%; background:var(--creme); }
+    .servicos-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem;
+      max-width:1160px; margin:0 auto;
+    }
+    .srv-card {
+      background:var(--branco); border-radius:8px; padding:2.2rem 1.8rem;
+      border:1px solid rgba(0,0,0,.06); box-shadow:0 3px 16px rgba(0,0,0,.05);
+      transition:all .3s; position:relative; overflow:hidden;
+    }
+    .srv-card::after {
+      content:''; position:absolute; top:0; left:0; width:4px; height:100%;
+      background:linear-gradient(to bottom,var(--v-pas),var(--az));
+      transform:scaleY(0); transform-origin:bottom; transition:transform .3s;
+    }
+    .srv-card:hover { transform:translateY(-5px); box-shadow:0 18px 42px rgba(0,0,0,.1); }
+    .srv-card:hover::after { transform:scaleY(1); }
+    .srv-icon { font-size:2.4rem; margin-bottom:1rem; display:block; }
+    .srv-card h3 { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--v-esc); margin-bottom:.7rem; }
+    .srv-card p { color:var(--cinza); font-size:.88rem; line-height:1.75; }
+
+    /* ── ANTES & DEPOIS ── */
+    #resultados { padding:5.5rem 5%; background:var(--palha); }
+    .ad-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; max-width:1160px; margin:0 auto; }
+    .ad-card { background:var(--branco); border-radius:8px; overflow:hidden; box-shadow:0 3px 16px rgba(0,0,0,.07); border:1px solid rgba(0,0,0,.06); transition:all .3s; }
+    .ad-card:hover { transform:translateY(-5px); box-shadow:0 18px 42px rgba(0,0,0,.11); }
+    .ad-info { padding:1.2rem 1.4rem; }
+    .ad-info h4 { font-family:'Playfair Display',serif; font-size:1rem; color:var(--v-esc); margin-bottom:.35rem; }
+    .ad-info p { color:var(--cinza); font-size:.82rem; line-height:1.65; }
+
+    /* ── MAPA ── */
+    #atuacao { padding:5.5rem 5%; background:linear-gradient(135deg,var(--v-esc),#0a1f0c); }
+    .atuacao-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; max-width:1160px; margin:0 auto; }
+    .estados-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1.8rem; }
+    .estado-pill {
+      background:rgba(255,255,255,.07); border:1px solid rgba(106,158,63,.3);
+      color:rgba(255,255,255,.7); padding:6px 14px; border-radius:20px;
+      font-size:.76rem; font-weight:600; text-align:center; transition:all .2s;
+    }
+    .estado-pill:hover { background:rgba(106,158,63,.2); color:var(--v-cla); border-color:var(--v-pas); }
+    .map-visual { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .map-visual svg { width:100%; max-width:420px; }
+    .state-active   { fill:#6a9e3f; stroke:#1a4a1e; stroke-width:0.8; transition:fill .2s; cursor:pointer; }
+    .state-active:hover { fill:#4caf50; }
+    .state-inactive { fill:rgba(255,255,255,.07); stroke:rgba(255,255,255,.2); stroke-width:0.5; }
+    .map-legend { display:flex; gap:1.5rem; margin-top:.8rem; }
+    .map-legend-item { display:flex; align-items:center; gap:6px; font-size:.72rem; color:rgba(255,255,255,.5); letter-spacing:.5px; font-family:'Karla',sans-serif; }
+    .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+    /* ── DEPOIMENTOS ── */
+    #depoimentos { padding:5.5rem 5%; background:var(--creme); }
+    .depo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; max-width:1160px; margin:0 auto; }
+    .depo-card {
+      background:var(--branco); border-radius:8px; padding:2.2rem;
+      border:1px solid rgba(0,0,0,.06); box-shadow:0 3px 16px rgba(0,0,0,.06);
+      transition:all .3s; position:relative; overflow:hidden;
+    }
+    .depo-card:hover { transform:translateY(-4px); box-shadow:0 14px 38px rgba(0,0,0,.09); }
+    .depo-card::before {
+      content:'\201C'; font-family:'Playfair Display',serif; font-size:5.5rem;
+      color:var(--v-pas); opacity:.15; position:absolute; top:-8px; left:16px; line-height:1;
+    }
+    .depo-stars { color:#f5a623; font-size:.85rem; margin-bottom:.9rem; }
+    .depo-text-card { font-family:'Lora',serif; font-style:italic; font-size:.9rem; color:#555; line-height:1.8; margin-bottom:1.4rem; }
+    .depo-author-row { display:flex; align-items:center; gap:11px; }
+    .depo-av-sm { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--v-pas),var(--az)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:.95rem; flex-shrink:0; }
+    .depo-nm { font-weight:700; color:var(--v-esc); font-size:.88rem; }
+    .depo-rl { color:#999; font-size:.76rem; margin-top:2px; }
+
+    /* ── CTA SERVIÇOS ── */
+    #cta-srv { padding:5rem 5%; background:var(--v-esc); text-align:center; }
+    #cta-srv h2 { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,3vw,2.4rem); color:#fff; margin:1rem 0; }
+    #cta-srv p { color:rgba(255,255,255,.6); font-family:'Lora',serif; max-width:520px; margin:0 auto 2rem; line-height:1.75; }
+
+    @media(max-width:900px) {
+      .servicos-grid { grid-template-columns:1fr; }
+      .ad-grid { grid-template-columns:1fr; }
+      .atuacao-inner { grid-template-columns:1fr; }
+      .depo-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner fi">
+    <span class="tag">O que fazemos</span>
+    <h1 class="section-title light">Serviços de <em>Consultoria</em></h1>
+    <div class="divider"></div>
+    <p style="margin-top:1rem;">Do diagnóstico de solo à entrega de feno no mercado — acompanhamento técnico completo para transformar sua propriedade em um negócio rural de alto desempenho.</p>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<section id="servicos-list">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:3.5rem;" class="fi">
+      <span class="tag">Nossos Serviços</span>
+      <h2 class="section-title">Soluções para o <em>campo</em></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="servicos-grid">
+      <div class="srv-card fi"><span class="srv-icon">🌱</span><h3>Manejo de Pastagens</h3><p>Diagnóstico completo, plano de recuperação e manejo estratégico para maximizar a produção de forragem por hectare com a menor necessidade de insumos.</p></div>
+      <div class="srv-card fi delay-1"><span class="srv-icon">🌾</span><h3>Produção de Feno</h3><p>Consultoria em todo o processo: escolha da forrageira, implantação, manejo, ponto de corte, secagem, enfardamento e armazenamento de alta qualidade.</p></div>
+      <div class="srv-card fi delay-2"><span class="srv-icon">🧪</span><h3>Análise de Solo</h3><p>Interpretação técnica e plano de adubação personalizado para corrigir deficiências, reduzir custos com insumos e aumentar a produtividade da área.</p></div>
+      <div class="srv-card fi"><span class="srv-icon">📊</span><h3>Gestão Agropecuária</h3><p>Implantação de indicadores de desempenho, controles financeiros e sistemas de gestão para enxergar a propriedade rural como uma empresa.</p></div>
+      <div class="srv-card fi delay-1"><span class="srv-icon">🐄</span><h3>Nutrição Animal</h3><p>Balanceamento de dietas forrageiras, suplementação estratégica e planejamento nutricional integrado ao sistema de pastagens e produção de feno.</p></div>
+      <div class="srv-card fi delay-2"><span class="srv-icon">🎓</span><h3>Treinamento e Capacitação</h3><p>Palestras técnicas, dias de campo e treinamentos presenciais para equipes rurais — multiplicando conhecimento em toda a cadeia produtiva.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTES & DEPOIS -->
+<section id="resultados">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:3.5rem;" class="fi">
+      <span class="tag">Resultados Reais</span>
+      <h2 class="section-title">Antes & <em>Depois</em> no Campo</h2>
+      <div class="divider center"></div>
+      <p class="lead" style="max-width:560px;margin:.8rem auto 0;">Propriedades reais transformadas pela Suporte Rural. Veja o impacto do trabalho técnico especializado.</p>
+    </div>
+    <div class="ad-grid">
+      <div class="ad-card fi">
+        <div class="ad-wrap">
+          <div class="ad-lbl ad-before-lbl">Antes</div>
+          <div class="ad-lbl ad-after-lbl">Depois</div>
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80" alt="antes"/>
+          <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80" alt="depois" style="display:none;"/>
+          <button class="ad-btn" onclick="toggleAD(this)">Ver Depois →</button>
+        </div>
+        <div class="ad-info"><h4>Fazenda Três Irmãos — MS</h4><p>Pastagem com 0,3 UA/ha recuperada para 1,8 UA/ha em 18 meses</p></div>
+      </div>
+      <div class="ad-card fi delay-1">
+        <div class="ad-wrap">
+          <div class="ad-lbl ad-before-lbl">Antes</div>
+          <div class="ad-lbl ad-after-lbl">Depois</div>
+          <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80" alt="antes"/>
+          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80" alt="depois" style="display:none;"/>
+          <button class="ad-btn" onclick="toggleAD(this)">Ver Depois →</button>
+        </div>
+        <div class="ad-info"><h4>Sítio Bom Retiro — GO</h4><p>Implantação de feno: 0 ton/ano para 120 ton na primeira safra</p></div>
+      </div>
+      <div class="ad-card fi delay-2">
+        <div class="ad-wrap">
+          <div class="ad-lbl ad-before-lbl">Antes</div>
+          <div class="ad-lbl ad-after-lbl">Depois</div>
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="antes"/>
+          <img src="https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=600&q=80" alt="depois" style="display:none;"/>
+          <button class="ad-btn" onclick="toggleAD(this)">Ver Depois →</button>
+        </div>
+        <div class="ad-info"><h4>Fazenda Santa Rita — MG</h4><p>Correção de solo: produtividade 3× em dois ciclos forrageiros</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPA DE ATUAÇÃO -->
+<section id="atuacao">
+  <div class="atuacao-inner">
+    <div class="fi">
+      <span class="tag" style="color:var(--v-cla);">Onde Atuamos</span>
+      <h2 class="section-title light">Presença em todo o <em>Brasil</em></h2>
+      <div class="divider"></div>
+      <p class="lead" style="color:rgba(255,255,255,.6);margin-top:1.3rem;">Equipe técnica com deslocamento para qualquer região do país. Mais de 12 estados atendidos com regularidade.</p>
+      <div class="estados-grid">
+        <div class="estado-pill">Mato Grosso do Sul</div>
+        <div class="estado-pill">Mato Grosso</div>
+        <div class="estado-pill">Goiás</div>
+        <div class="estado-pill">Minas Gerais</div>
+        <div class="estado-pill">São Paulo</div>
+        <div class="estado-pill">Paraná</div>
+        <div class="estado-pill">Pará</div>
+        <div class="estado-pill">Rondônia</div>
+        <div class="estado-pill">Tocantins</div>
+        <div class="estado-pill">Bahia</div>
+        <div class="estado-pill">Rio Grande do Sul</div>
+        <div class="estado-pill">+ outros</div>
+      </div>
+    </div>
+    <div class="map-visual fi delay-1">
+      <!-- Mapa do Brasil — estados com atendimento em verde, demais em cinza -->
+      <!-- Estados atendidos: MS, MT, GO, MG, SP, PR, PA, RO, TO, BA, RS, SC, ES, RJ, DF, AC, AM -->
+      <svg viewBox="0 0 500 540" xmlns="http://www.w3.org/2000/svg">
+        <!-- Amazonas -->
+        <path class="state-active" title="Amazonas" d="M55,60 L45,75 L38,100 L30,130 L28,160 L32,185 L40,200 L55,210 L70,215 L90,218 L110,215 L125,210 L135,200 L140,185 L145,165 L148,145 L145,125 L140,110 L132,95 L120,82 L105,72 L90,65 L75,60 Z"/>
+        <!-- Pará -->
+        <path class="state-active" title="Pará" d="M150,55 L135,60 L120,72 L132,95 L140,110 L145,125 L148,145 L145,165 L148,180 L158,190 L172,195 L188,195 L200,190 L212,183 L222,175 L228,162 L230,148 L228,132 L222,118 L215,105 L205,94 L195,85 L183,76 L170,67 L158,58 Z"/>
+        <!-- Roraima -->
+        <path class="state-inactive" title="Roraima" d="M130,20 L118,28 L108,38 L100,50 L105,62 L120,72 L135,60 L148,52 L155,42 L148,30 L138,22 Z"/>
+        <!-- Amapá -->
+        <path class="state-inactive" title="Amapá" d="M200,18 L190,25 L182,35 L178,48 L182,60 L192,68 L205,70 L215,62 L220,50 L216,36 L208,24 Z"/>
+        <!-- Acre -->
+        <path class="state-active" title="Acre" d="M28,200 L20,215 L18,230 L22,242 L32,248 L45,248 L58,244 L68,236 L72,225 L68,215 L58,208 L45,205 L32,202 Z"/>
+        <!-- Rondônia -->
+        <path class="state-active" title="Rondônia" d="M70,215 L55,210 L45,215 L38,228 L42,245 L52,255 L65,258 L80,255 L92,248 L98,235 L95,222 L85,215 Z"/>
+        <!-- Mato Grosso -->
+        <path class="state-active" title="Mato Grosso" d="M148,180 L135,188 L125,198 L118,210 L112,225 L110,245 L112,265 L118,280 L128,292 L142,300 L158,305 L175,305 L190,300 L202,290 L210,278 L215,262 L215,245 L212,228 L206,215 L198,202 L188,193 L175,187 L162,183 Z"/>
+        <!-- Tocantins -->
+        <path class="state-active" title="Tocantins" d="M230,148 L220,158 L215,172 L213,188 L215,205 L220,220 L228,232 L238,240 L250,244 L262,242 L272,235 L278,224 L278,210 L275,195 L268,182 L258,170 L246,160 L235,152 Z"/>
+        <!-- Maranhão -->
+        <path class="state-inactive" title="Maranhão" d="M230,130 L220,138 L215,150 L220,160 L230,168 L242,172 L255,170 L265,162 L270,150 L266,138 L258,128 L246,122 L235,124 Z"/>
+        <!-- Piauí -->
+        <path class="state-inactive" title="Piauí" d="M270,148 L260,158 L255,170 L258,183 L265,194 L275,200 L286,200 L296,194 L302,184 L302,172 L298,160 L290,150 L280,145 Z"/>
+        <!-- Ceará -->
+        <path class="state-inactive" title="Ceará" d="M300,140 L290,148 L285,160 L288,172 L296,180 L308,182 L320,178 L328,168 L328,156 L322,146 L312,140 Z"/>
+        <!-- Rio Grande do Norte -->
+        <path class="state-inactive" title="Rio Grande do Norte" d="M328,155 L320,162 L320,174 L328,180 L340,182 L350,178 L355,168 L350,158 L340,152 Z"/>
+        <!-- Paraíba -->
+        <path class="state-inactive" title="Paraíba" d="M328,183 L318,188 L315,198 L320,207 L330,210 L342,208 L350,200 L348,190 L338,184 Z"/>
+        <!-- Pernambuco -->
+        <path class="state-inactive" title="Pernambuco" d="M280,200 L268,205 L262,216 L265,228 L275,234 L290,235 L308,232 L320,225 L324,213 L318,203 L306,198 L292,198 Z"/>
+        <!-- Alagoas -->
+        <path class="state-inactive" title="Alagoas" d="M318,225 L308,230 L305,240 L310,250 L322,252 L334,248 L338,238 L334,228 Z"/>
+        <!-- Sergipe -->
+        <path class="state-inactive" title="Sergipe" d="M310,252 L302,258 L300,268 L306,276 L318,278 L328,272 L330,260 L322,253 Z"/>
+        <!-- Bahia -->
+        <path class="state-active" title="Bahia" d="M280,234 L268,242 L258,255 L252,270 L250,288 L252,308 L258,325 L268,338 L282,346 L298,350 L315,348 L330,340 L340,328 L345,312 L344,295 L340,278 L332,263 L320,253 L308,248 L294,242 Z"/>
+        <!-- Minas Gerais -->
+        <path class="state-active" title="Minas Gerais" d="M215,305 L202,312 L192,322 L186,335 L185,350 L188,364 L196,375 L208,382 L222,386 L238,385 L252,380 L263,370 L270,357 L272,342 L268,327 L260,314 L248,305 L234,300 Z"/>
+        <!-- Goiás -->
+        <path class="state-active" title="Goiás" d="M215,262 L210,278 L208,295 L210,312 L215,325 L224,335 L236,340 L250,342 L264,338 L274,328 L280,314 L280,298 L276,280 L268,265 L256,254 L242,248 L228,248 Z"/>
+        <!-- Distrito Federal -->
+        <path class="state-active" title="Distrito Federal" d="M248,298 L243,304 L244,312 L250,316 L257,313 L258,305 L253,299 Z"/>
+        <!-- Mato Grosso do Sul -->
+        <path class="state-active" title="Mato Grosso do Sul" d="M160,310 L148,318 L140,330 L136,345 L138,362 L145,375 L156,384 L170,388 L185,386 L198,380 L208,370 L212,355 L210,338 L204,323 L194,312 L180,306 Z"/>
+        <!-- São Paulo -->
+        <path class="state-active" title="São Paulo" d="M210,382 L200,390 L194,402 L194,416 L200,427 L212,434 L226,436 L240,432 L250,424 L256,412 L254,398 L246,387 L234,380 L220,378 Z"/>
+        <!-- Rio de Janeiro -->
+        <path class="state-active" title="Rio de Janeiro" d="M265,375 L256,382 L252,393 L256,403 L266,408 L278,406 L286,398 L285,386 L276,378 Z"/>
+        <!-- Espírito Santo -->
+        <path class="state-active" title="Espírito Santo" d="M272,342 L264,350 L260,362 L262,374 L270,380 L282,380 L290,372 L290,358 L285,346 L276,340 Z"/>
+        <!-- Paraná -->
+        <path class="state-active" title="Paraná" d="M175,390 L162,396 L152,406 L148,420 L152,434 L162,442 L176,445 L192,442 L205,434 L212,420 L210,405 L202,394 L188,388 Z"/>
+        <!-- Santa Catarina -->
+        <path class="state-inactive" title="Santa Catarina" d="M162,446 L150,452 L144,464 L148,476 L158,482 L172,480 L182,472 L183,460 L174,451 Z"/>
+        <!-- Rio Grande do Sul -->
+        <path class="state-active" title="Rio Grande do Sul" d="M150,484 L138,492 L130,505 L130,520 L138,530 L152,534 L168,532 L180,524 L186,510 L183,496 L175,485 L162,480 Z"/>
+        <!-- Legenda estrela sede MS -->
+        <circle cx="172" cy="350" r="5" fill="#ffffff" opacity=".9"/>
+        <circle cx="172" cy="350" r="3" fill="#6a9e3f"/>
+      </svg>
+      <div class="map-legend">
+        <div class="map-legend-item"><div class="legend-dot" style="background:#6a9e3f;"></div>Com atendimento</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);"></div>Sem cliente ainda</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:#fff;width:8px;height:8px;border:2px solid #6a9e3f;border-radius:50%;"></div>Sede (MS)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:3.5rem;" class="fi">
+      <span class="tag">Clientes</span>
+      <h2 class="section-title">O que dizem sobre <em>nós</em></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="depo-grid">
+      <div class="depo-card fi">
+        <div class="depo-stars">★★★★★</div>
+        <p class="depo-text-card">"A consultoria da Suporte Rural transformou nossas pastagens. Em dois anos, aumentamos a lotação em 40% sem precisar abrir novas áreas. Excelente suporte técnico e muito presentes no campo."</p>
+        <div class="depo-author-row"><div class="depo-av-sm">JM</div><div><div class="depo-nm">João Marcos Ferreira</div><div class="depo-rl">Pecuarista · Mato Grosso do Sul</div></div></div>
+      </div>
+      <div class="depo-card fi delay-1">
+        <div class="depo-stars">★★★★★</div>
+        <p class="depo-text-card">"Implementamos a produção de feno seguindo as orientações da equipe e hoje vendemos excedente para outros produtores. O investimento se pagou em menos de um ano."</p>
+        <div class="depo-author-row"><div class="depo-av-sm">CA</div><div><div class="depo-nm">Carlos Alves</div><div class="depo-rl">Produtor Rural · Goiás</div></div></div>
+      </div>
+      <div class="depo-card fi delay-2">
+        <div class="depo-stars">★★★★★</div>
+        <p class="depo-text-card">"O planejamento forrageiro resolveu nosso problema de sazonalidade. Gado mais saudável, menos custo com suplemento e mais lucro no final. Recomendo sem hesitar."</p>
+        <div class="depo-author-row"><div class="depo-av-sm">MS</div><div><div class="depo-nm">Maria Souza</div><div class="depo-rl">Produtora · Minas Gerais</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-srv">
+  <span class="tag" style="color:var(--v-cla);">Próximo Passo</span>
+  <h2>Pronto para transformar sua <em style="color:var(--v-cla);font-style:italic;">propriedade</em>?</h2>
+  <p>Fale com nossa equipe e receba uma proposta personalizada em até 24 horas.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="contato.html" class="btn btn-green">Solicitar Consultoria</a>
+    <a href="https://wa.me/5567999999999" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
+  </div>
+</section>
+
+<script src="sr_shared.js"></script>
+<script>
+function toggleAD(btn) {
+  const wrap = btn.closest('.ad-wrap');
+  const imgs = wrap.querySelectorAll('img');
+  const lbls = wrap.querySelectorAll('.ad-lbl');
+  const isBefore = imgs[0].style.display !== 'none';
+  imgs[0].style.display = isBefore ? 'none' : '';
+  imgs[1].style.display = isBefore ? '' : 'none';
+  lbls[0].style.display = isBefore ? 'none' : '';
+  lbls[1].style.display = isBefore ? '' : 'none';
+  btn.textContent = isBefore ? '← Ver Antes' : 'Ver Depois →';
+}
+
+// Map tooltip
+const tip = document.createElement('div');
+tip.style.cssText = 'position:fixed;background:rgba(26,74,30,.95);color:#fff;padding:5px 12px;border-radius:4px;font-size:.78rem;font-family:Karla,sans-serif;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9000;border:1px solid rgba(106,158,63,.5);white-space:nowrap;';
+document.body.appendChild(tip);
+
+document.querySelectorAll('.state-active,.state-inactive').forEach(path => {
+  const name = path.getAttribute('title');
+  const active = path.classList.contains('state-active');
+  path.addEventListener('mouseenter', e => {
+    tip.textContent = name + (active ? ' ✓' : '');
+    tip.style.opacity = '1';
+  });
+  path.addEventListener('mousemove', e => {
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top  = (e.clientY - 28) + 'px';
+  });
+  path.addEventListener('mouseleave', () => { tip.style.opacity = '0'; });
+});
+</script>
+</body>
+</html>

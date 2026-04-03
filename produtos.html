@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Produtos — Suporte Rural</title>
+  <link rel="stylesheet" href="sr_style.css"/>
+  <style>
+    /* ── LIVROS ── */
+    #livros { padding:5.5rem 5%; background:var(--creme); }
+    .livros-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; max-width:1160px; margin:0 auto; }
+    .livro-card {
+      background:var(--branco); border-radius:8px; overflow:hidden;
+      border:1px solid rgba(0,0,0,.06); box-shadow:0 3px 16px rgba(0,0,0,.06);
+      display:flex; flex-direction:column; transition:all .3s;
+    }
+    .livro-card:hover { transform:translateY(-6px); box-shadow:0 20px 48px rgba(0,0,0,.11); }
+    .livro-capa {
+      aspect-ratio:3/2; display:flex; align-items:center; justify-content:center;
+      padding:2rem; position:relative;
+    }
+    .livro-capa-1 { background:linear-gradient(135deg,#1a4a1e,#2e7d32); }
+    .livro-capa-2 { background:linear-gradient(135deg,#1565c0,#0d47a1); }
+    .livro-capa-3 { background:linear-gradient(135deg,#5d3e1a,#8b5e3c); }
+    .livro-spine-wrap {
+      display:flex; box-shadow:8px 8px 24px rgba(0,0,0,.4); border-radius:2px; overflow:hidden;
+      width:110px; height:148px;
+    }
+    .l-spine { width:13px; background:rgba(0,0,0,.3); flex-shrink:0; }
+    .l-face {
+      flex:1; background:rgba(255,255,255,.07); border-left:1px solid rgba(255,255,255,.1);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 8px;
+    }
+    .l-face span { font-size:1.8rem; }
+    .l-face p { font-family:'Playfair Display',serif; font-size:.72rem; color:rgba(255,255,255,.9); text-align:center; line-height:1.4; margin-top:7px; }
+    .livro-badge {
+      position:absolute; top:12px; right:12px; background:var(--az);
+      color:#fff; font-size:.62rem; font-weight:700; letter-spacing:1.5px;
+      text-transform:uppercase; padding:4px 10px; border-radius:2px;
+    }
+    .livro-info { padding:1.6rem; flex:1; display:flex; flex-direction:column; gap:.5rem; }
+    .livro-info h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--v-esc); line-height:1.35; }
+    .livro-info .autor { color:var(--v-pas); font-size:.78rem; font-weight:700; letter-spacing:.5px; }
+    .livro-info p { color:var(--cinza); font-size:.84rem; line-height:1.68; flex:1; }
+    .livro-footer { margin-top:1rem; }
+
+    /* ── RECOMPACTADORA ── */
+    #recompactadora { padding:5.5rem 5%; background:var(--palha); }
+    .recomp-inner { max-width:1160px; margin:0 auto; }
+    .recomp-card {
+      background:linear-gradient(135deg,var(--v-esc) 0%,#0d2e10 60%,#1a3a5c 100%);
+      border-radius:10px; overflow:hidden;
+      display:grid; grid-template-columns:1.1fr 1fr;
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+    }
+    .recomp-text { padding:3.5rem; }
+    .recomp-text .tag { color:var(--v-cla); margin-bottom:1rem; }
+    .recomp-text h2 { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,3vw,2.2rem); color:#fff; line-height:1.2; margin-bottom:1rem; }
+    .recomp-text h2 em { color:var(--v-cla); font-style:italic; }
+    .recomp-text p { color:rgba(255,255,255,.65); font-family:'Lora',serif; line-height:1.85; margin-bottom:1.5rem; font-size:.95rem; }
+    .recomp-features { list-style:none; margin-bottom:2rem; }
+    .recomp-features li { display:flex; align-items:center; gap:9px; color:rgba(255,255,255,.75); font-size:.88rem; margin-bottom:.65rem; }
+    .recomp-features li::before { content:'✓'; color:var(--v-cla); font-weight:700; flex-shrink:0; }
+    .recomp-btns { display:flex; gap:1rem; flex-wrap:wrap; }
+    .btn-ghost-white { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.3); }
+    .btn-ghost-white:hover { border-color:var(--v-cla); color:var(--v-cla); }
+    .recomp-visual {
+      background:linear-gradient(135deg,rgba(106,158,63,.15),rgba(21,101,192,.15));
+      display:flex; align-items:center; justify-content:center; padding:3rem;
+      position:relative; overflow:hidden;
+    }
+    .recomp-visual::before, .recomp-visual::after {
+      content:''; position:absolute; border-radius:50%; border:1px solid rgba(255,255,255,.05);
+    }
+    .recomp-visual::before { width:280px; height:280px; top:-60px; right:-60px; }
+    .recomp-visual::after  { width:200px; height:200px; bottom:-50px; left:-40px; }
+    .recomp-icon-wrap {
+      width:160px; height:160px; border-radius:50%;
+      background:rgba(106,158,63,.12); border:2px solid rgba(106,158,63,.35);
+      display:flex; align-items:center; justify-content:center; font-size:4.5rem;
+      animation:waPulse 3s ease-in-out infinite; position:relative; z-index:2;
+    }
+
+    /* ── CTA produtos ── */
+    #cta-prod { padding:5rem 5%; background:var(--v-esc); text-align:center; }
+    #cta-prod h2 { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,3vw,2.2rem); color:#fff; margin:.8rem 0; }
+    #cta-prod p { color:rgba(255,255,255,.55); font-family:'Lora',serif; max-width:480px; margin:0 auto 2rem; line-height:1.75; }
+
+    @media(max-width:900px) {
+      .livros-grid { grid-template-columns:1fr; }
+      .recomp-card { grid-template-columns:1fr; }
+      .recomp-visual { min-height:240px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner fi">
+    <span class="tag">Loja Suporte Rural</span>
+    <h1 class="section-title light">Conhecimento que <em>transforma</em></h1>
+    <div class="divider"></div>
+    <p style="margin-top:1rem;">eBooks técnicos na Amazon e equipamentos desenvolvidos pelos especialistas da Suporte Rural. Tudo o que você precisa para evoluir no campo.</p>
+  </div>
+</div>
+
+<!-- LIVROS -->
+<section id="livros">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:3.5rem;" class="fi">
+      <span class="tag">eBooks na Amazon</span>
+      <h2 class="section-title">Livros <em>Técnicos</em></h2>
+      <div class="divider center"></div>
+      <p class="lead" style="max-width:520px;margin:.8rem auto 0;">Disponíveis em versão Kindle (leitura imediata) e impressa, com frete para todo o Brasil.</p>
+    </div>
+    <div class="livros-grid">
+
+      <div class="livro-card fi">
+        <div class="livro-capa livro-capa-1">
+          <div class="livro-badge">eBook Kindle</div>
+          <div class="livro-spine-wrap">
+            <div class="l-spine"></div>
+            <div class="l-face"><span>🌱</span><p>Formação de Pastagem de Tifton 85 e Outras Bermudas</p></div>
+          </div>
+        </div>
+        <div class="livro-info">
+          <div class="autor">Rodolfo Wartto Cyrineu</div>
+          <h3>Formação de Pastagem de Tifton 85 e Outras Bermudas</h3>
+          <p>Implantação de Tifton 85, Jiggs, Coastcross e Florakirk com regulagem técnica de calcareadora, adubadora e pulverizador para formação eficiente e produtiva.</p>
+          <div class="livro-footer">
+            <a href="https://www.amazon.com.br/Forma%C3%A7%C3%A3o-pastagem-Tifton-outras-bermudas-ebook/dp/B0CDCP9GQ6/" target="_blank" class="btn btn-amazon btn-full">🛒 Comprar na Amazon</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="livro-card fi delay-1">
+        <div class="livro-capa livro-capa-2">
+          <div class="livro-badge">eBook Kindle</div>
+          <div class="livro-spine-wrap">
+            <div class="l-spine"></div>
+            <div class="l-face"><span>🌾</span><p>Produção de Feno: Enfardamento, Estocagem e Comercialização</p></div>
+          </div>
+        </div>
+        <div class="livro-info">
+          <div class="autor">Rodolfo Wartto Cyrineu · 3ª Edição</div>
+          <h3>Produção de Feno: Enfardamento, Estocagem e Comercialização</h3>
+          <p>Da formação dos campos ao mercado — guia completo em 106 páginas. Avaliação ⭐ 4,5/5 na Amazon. O livro mais completo sobre fenação em língua portuguesa.</p>
+          <div class="livro-footer">
+            <a href="https://www.amazon.com.br/Produ%C3%A7%C3%A3o-Feno-enfardamento-estocagem-comercializa%C3%A7%C3%A3o-ebook/dp/B0CD2L3V8G/" target="_blank" class="btn btn-amazon btn-full">🛒 Comprar na Amazon</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="livro-card fi delay-2">
+        <div class="livro-capa livro-capa-3">
+          <div class="livro-badge">eBook Kindle</div>
+          <div class="livro-spine-wrap">
+            <div class="l-spine"></div>
+            <div class="l-face"><span>⚙️</span><p>Regulagem de Pulverizador, Calcareadora e Adubadora</p></div>
+          </div>
+        </div>
+        <div class="livro-info">
+          <div class="autor">Wartto Cyrineu</div>
+          <h3>Regulagem de Pulverizador Tratorizado, Calcareadora e Adubadora</h3>
+          <p>Metodologia prática para regular corretamente os principais equipamentos de campo. Essencial para máxima eficiência na aplicação de insumos agrícolas.</p>
+          <div class="livro-footer">
+            <a href="https://www.amazon.com.br/Regulagem-pulverizador-tratorizado-calcareadora-adubadora-ebook/dp/B09VRYMX3Y/" target="_blank" class="btn btn-amazon btn-full">🛒 Comprar na Amazon</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RECOMPACTADORA -->
+<section id="recompactadora">
+  <div class="recomp-inner">
+    <div style="text-align:center;margin-bottom:3rem;" class="fi">
+      <span class="tag">Equipamentos</span>
+      <h2 class="section-title">Tecnologia para o <em>Campo</em></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="recomp-card fi">
+      <div class="recomp-text">
+        <span class="tag">Equipamento Suporte Rural</span>
+        <h2>Recompactadora <em>de Feno</em></h2>
+        <p>Equipamento desenvolvido para recompactar fardos de feno, aumentando a densidade e reduzindo significativamente os custos de transporte e armazenamento. Ideal para propriedades que produzem ou comercializam feno em escala.</p>
+        <ul class="recomp-features">
+          <li>Aumenta a densidade do fardo em até 40%</li>
+          <li>Reduz custo de frete e armazenamento</li>
+          <li>Preserva qualidade nutricional do feno</li>
+          <li>Operação simples e manutenção facilitada</li>
+          <li>Retorno rápido do investimento</li>
+        </ul>
+        <div class="recomp-btns">
+          <a href="https://www.instagram.com/p/DDz87GHyxri/" target="_blank" class="btn btn-green">📷 Ver no Instagram</a>
+          <a href="https://wa.me/5567999999999?text=Olá!%20Tenho%20interesse%20na%20Recompactadora%20de%20Feno" target="_blank" class="btn btn-ghost-white">💬 Pedir Orçamento</a>
+        </div>
+      </div>
+      <div class="recomp-visual">
+        <div class="recomp-icon-wrap">⚙️</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-prod">
+  <span class="tag" style="color:var(--v-cla);">Dúvidas?</span>
+  <h2>Precisa de ajuda para <em style="color:var(--v-cla);font-style:italic;">escolher</em>?</h2>
+  <p>Nossa equipe orienta você sobre qual produto ou equipamento faz mais sentido para a sua propriedade.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="https://wa.me/5567999999999" target="_blank" class="btn btn-wa">💬 Falar no WhatsApp</a>
+    <a href="contato.html" class="btn btn-outline" style="border-color:rgba(255,255,255,.3);color:#fff;">Enviar mensagem</a>
+  </div>
+</section>
+
+<script src="sr_shared.js"></script>
+</body>
+</html>

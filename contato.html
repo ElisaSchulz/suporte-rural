@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contato — Suporte Rural</title>
+  <link rel="stylesheet" href="sr_style.css"/>
+  <style>
+    /* ── CONTATO MAIN ── */
+    #contato-main { padding:5.5rem 5%; background:var(--creme); }
+    .contato-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:5rem; max-width:1160px; margin:0 auto; align-items:start; }
+
+    /* FORM */
+    .form-card {
+      background:var(--branco); border-radius:10px; padding:2.8rem;
+      border:1px solid rgba(0,0,0,.06); box-shadow:0 6px 30px rgba(0,0,0,.07);
+    }
+    .form-card h2 { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--v-esc); margin-bottom:.4rem; }
+    .form-card .sub { color:var(--cinza); font-size:.88rem; margin-bottom:2rem; font-family:'Lora',serif; line-height:1.6; }
+    .form-group { margin-bottom:1.1rem; }
+    .form-group label { display:block; color:var(--v-esc); font-size:.75rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%; background:#f9f6f0; border:1.5px solid var(--palha);
+      border-radius:4px; padding:11px 14px; font-family:'Karla',sans-serif;
+      font-size:.93rem; color:var(--texto); transition:border-color .2s; outline:none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--v-pas); background:#fff; }
+    .form-group select { cursor:pointer; }
+    .form-group textarea { min-height:110px; resize:vertical; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .btn-submit {
+      width:100%; background:var(--v-pas); color:#fff; border:none;
+      padding:14px; border-radius:4px; font-family:'Karla',sans-serif;
+      font-size:1rem; font-weight:700; letter-spacing:.5px; cursor:pointer;
+      transition:all .25s; margin-top:.5rem; text-transform:uppercase;
+    }
+    .btn-submit:hover { background:var(--v-cla); color:var(--v-esc); transform:translateY(-2px); box-shadow:0 8px 22px rgba(76,175,80,.35); }
+    .btn-submit.sent { background:#25d366; }
+
+    /* INFO */
+    .info-panel { display:flex; flex-direction:column; gap:1.8rem; }
+    .info-block { display:flex; align-items:flex-start; gap:1.1rem; }
+    .info-icon-wrap {
+      width:48px; height:48px; flex-shrink:0; border-radius:6px;
+      background:rgba(106,158,63,.1); border:1px solid rgba(106,158,63,.25);
+      display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+    }
+    .info-block h4 { color:var(--v-pas); font-size:.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:3px; }
+    .info-block p, .info-block a { color:var(--cinza); font-size:.92rem; text-decoration:none; transition:color .2s; line-height:1.6; }
+    .info-block a:hover { color:var(--v-pas); }
+    .wa-big {
+      background:#25d366; color:#fff; border-radius:8px; padding:1.6rem;
+      display:flex; align-items:center; gap:1rem; text-decoration:none;
+      transition:all .3s; box-shadow:0 6px 24px rgba(37,211,102,.25);
+    }
+    .wa-big:hover { background:#1da851; transform:translateY(-3px); box-shadow:0 12px 36px rgba(37,211,102,.4); }
+    .wa-big-icon { font-size:2.2rem; flex-shrink:0; }
+    .wa-big strong { display:block; color:#fff; font-size:1rem; font-weight:700; }
+    .wa-big span { color:rgba(255,255,255,.75); font-size:.82rem; }
+    .social-row { display:flex; gap:.8rem; }
+    .soc-btn {
+      display:flex; align-items:center; gap:7px; padding:9px 16px;
+      border-radius:4px; text-decoration:none; font-size:.82rem; font-weight:600;
+      transition:all .25s; border:1.5px solid;
+    }
+    .soc-yt { border-color:#ff0000; color:#ff0000; }
+    .soc-yt:hover { background:#ff0000; color:#fff; }
+    .soc-ig { border-color:#e1306c; color:#e1306c; }
+    .soc-ig:hover { background:#e1306c; color:#fff; }
+
+    /* MAP EMBED PLACEHOLDER */
+    .map-placeholder {
+      background:var(--palha); border-radius:8px; aspect-ratio:16/7;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:.8rem; border:1px solid rgba(0,0,0,.06);
+      font-family:'Lora',serif; color:var(--cinza); font-style:italic;
+    }
+    .map-placeholder span { font-size:2.5rem; }
+
+    @media(max-width:900px) {
+      .contato-grid { grid-template-columns:1fr; gap:3rem; }
+      .form-row { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner fi">
+    <span class="tag">Fale Conosco</span>
+    <h1 class="section-title light">Vamos <em>transformar</em> sua propriedade</h1>
+    <div class="divider"></div>
+    <p style="margin-top:1rem;">Preencha o formulário ou nos chame pelo WhatsApp. Nossa equipe técnica responde em até 24 horas.</p>
+  </div>
+</div>
+
+<!-- CONTATO -->
+<section id="contato-main">
+  <div class="contato-grid">
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card fi">
+      <h2>Solicitar Consultoria</h2>
+      <p class="sub">Conta um pouco sobre sua propriedade e entraremos em contato com uma proposta personalizada.</p>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome completo</label>
+            <input type="text" placeholder="Seu nome" required/>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp</label>
+            <input type="tel" placeholder="(00) 00000-0000" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" placeholder="seu@email.com"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Estado</label>
+            <select>
+              <option value="">Selecione...</option>
+              <option>Mato Grosso do Sul</option>
+              <option>Mato Grosso</option>
+              <option>Goiás</option>
+              <option>Minas Gerais</option>
+              <option>São Paulo</option>
+              <option>Paraná</option>
+              <option>Pará</option>
+              <option>Rondônia</option>
+              <option>Tocantins</option>
+              <option>Bahia</option>
+              <option>Rio Grande do Sul</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Área aproximada</label>
+            <select>
+              <option value="">Selecione...</option>
+              <option>Até 50 ha</option>
+              <option>50 a 200 ha</option>
+              <option>200 a 500 ha</option>
+              <option>500 a 1.000 ha</option>
+              <option>Acima de 1.000 ha</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Principal interesse</label>
+          <select>
+            <option value="">Selecione o serviço...</option>
+            <option>Manejo de Pastagens</option>
+            <option>Produção de Feno</option>
+            <option>Análise de Solo</option>
+            <option>Gestão Agropecuária</option>
+            <option>Nutrição Animal</option>
+            <option>Treinamento e Capacitação</option>
+            <option>Recompactadora de Feno</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensagem</label>
+          <textarea placeholder="Conte sobre sua propriedade, desafios atuais e o que espera da consultoria..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="submit-btn">Enviar Solicitação →</button>
+      </form>
+    </div>
+
+    <!-- INFO -->
+    <div class="info-panel fi delay-1">
+      <a href="https://wa.me/5567999999999" target="_blank" class="wa-big">
+        <span class="wa-big-icon">💬</span>
+        <div>
+          <strong>Chamar no WhatsApp agora</strong>
+          <span>Resposta rápida · Segunda a Sábado</span>
+        </div>
+      </a>
+
+      <div class="info-block">
+        <div class="info-icon-wrap">📍</div>
+        <div><h4>Localização</h4><p>Atendimento em todo o Brasil<br>Sede: Campo Grande – MS</p></div>
+      </div>
+      <div class="info-block">
+        <div class="info-icon-wrap">📱</div>
+        <div><h4>WhatsApp</h4><a href="https://wa.me/5567999999999">(67) 9 9999-9999</a></div>
+      </div>
+      <div class="info-block">
+        <div class="info-icon-wrap">📧</div>
+        <div><h4>E-mail</h4><a href="mailto:contato@suporterural.com.br">contato@suporterural.com.br</a></div>
+      </div>
+      <div class="info-block">
+        <div class="info-icon-wrap">🕐</div>
+        <div><h4>Horário de Atendimento</h4><p>Segunda a Sexta: 8h às 18h<br>Sábado: 8h às 12h</p></div>
+      </div>
+
+      <div>
+        <p style="color:var(--cinza);font-size:.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.9rem;">Redes Sociais</p>
+        <div class="social-row">
+          <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="soc-btn soc-yt">▶ YouTube</a>
+          <a href="https://instagram.com/suporteruralconsultoria" target="_blank" class="soc-btn soc-ig">📷 Instagram</a>
+        </div>
+      </div>
+
+      <div class="map-placeholder">
+        <span>📍</span>
+        <p>Insira aqui o Google Maps embed<br>da sede em Campo Grande – MS</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="sr_shared.js"></script>
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = '✓ Mensagem enviada com sucesso!';
+  btn.classList.add('sent');
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'Enviar Solicitação →';
+    btn.classList.remove('sent');
+    btn.disabled = false;
+    e.target.reset();
+  }, 4000);
+}
+</script>
+</body>
+</html>

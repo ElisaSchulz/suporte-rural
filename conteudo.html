@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Conteúdo — Suporte Rural</title>
+  <link rel="stylesheet" href="sr_style.css"/>
+  <style>
+    /* ── CANAL ── */
+    #canal { padding:5.5rem 5%; background:var(--creme); }
+    .canal-inner { display:grid; grid-template-columns:1.1fr 1fr; gap:5rem; align-items:center; max-width:1160px; margin:0 auto; }
+    .canal-thumb {
+      background:var(--v-esc); border-radius:10px; aspect-ratio:16/9;
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden; text-decoration:none;
+      box-shadow:0 24px 60px rgba(0,0,0,.3);
+    }
+    .canal-thumb::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(106,158,63,.18),rgba(21,101,192,.18)); }
+    .play-circle {
+      width:80px; height:80px; background:rgba(255,0,0,.9); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:2rem; color:#fff; position:relative; z-index:2;
+      transition:transform .3s, background .3s;
+    }
+    .canal-thumb:hover .play-circle { transform:scale(1.12); background:#ff0000; }
+    .canal-chip {
+      position:absolute; bottom:14px; left:14px; z-index:3;
+      background:rgba(0,0,0,.75); color:#fff; font-size:.72rem; font-weight:600;
+      padding:5px 12px; border-radius:2px; letter-spacing:.5px;
+    }
+    .canal-text .tag { display:block; }
+    .canal-text p { margin:1.2rem 0; }
+    .canal-stats { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1.8rem 0; }
+    .canal-stat {
+      background:var(--palha); border-radius:6px; padding:1rem 1.2rem;
+      border:1px solid rgba(0,0,0,.06);
+    }
+    .canal-stat strong { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--v-esc); display:block; }
+    .canal-stat span { font-size:.74rem; color:var(--cinza); letter-spacing:.5px; text-transform:uppercase; }
+
+    /* ── TEMAS ── */
+    #temas { padding:5.5rem 5%; background:var(--palha); }
+    .temas-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; max-width:1160px; margin:0 auto; }
+    .tema-card {
+      background:var(--branco); border-radius:8px; padding:1.8rem 1.6rem;
+      border:1px solid rgba(0,0,0,.06); box-shadow:0 3px 14px rgba(0,0,0,.05);
+      transition:all .3s; text-decoration:none; display:flex; flex-direction:column; gap:.7rem;
+    }
+    .tema-card:hover { transform:translateY(-4px); box-shadow:0 14px 38px rgba(0,0,0,.1); }
+    .tema-icon { font-size:2rem; }
+    .tema-card h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--v-esc); }
+    .tema-card p { font-size:.83rem; color:var(--cinza); line-height:1.68; flex:1; }
+    .tema-link { font-size:.78rem; font-weight:700; color:var(--v-pas); letter-spacing:.5px; }
+
+    /* ── VÍDEOS RECENTES ── */
+    #videos { padding:5.5rem 5%; background:var(--v-esc); }
+    .videos-list { max-width:1160px; margin:0 auto; display:flex; flex-direction:column; gap:1rem; }
+    .video-row {
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09);
+      border-radius:6px; display:flex; align-items:center; gap:1.2rem;
+      padding:.9rem 1.2rem; text-decoration:none; transition:all .25s;
+    }
+    .video-row:hover { background:rgba(255,255,255,.09); transform:translateX(5px); border-color:rgba(106,158,63,.35); }
+    .video-icon {
+      width:54px; height:54px; flex-shrink:0; border-radius:4px;
+      background:linear-gradient(135deg,var(--v-pas),var(--az));
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem; color:#fff;
+    }
+    .video-title { font-weight:600; color:var(--branco); font-size:.9rem; line-height:1.4; flex:1; }
+    .video-tag-lbl { font-size:.7rem; color:rgba(255,255,255,.4); margin-top:3px; }
+    .video-arrow { color:rgba(255,255,255,.3); font-size:1.1rem; }
+
+    /* ── CTA CONTEÚDO ── */
+    #cta-conteudo { padding:5rem 5%; background:var(--palha); text-align:center; }
+    #cta-conteudo h2 { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,3vw,2.2rem); color:var(--v-esc); margin:.8rem 0; }
+    #cta-conteudo p { color:var(--cinza); font-family:'Lora',serif; max-width:480px; margin:0 auto 2rem; line-height:1.75; }
+
+    @media(max-width:900px) {
+      .canal-inner { grid-template-columns:1fr; gap:2.5rem; }
+      .temas-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media(max-width:560px) {
+      .temas-grid { grid-template-columns:1fr; }
+      .canal-stats { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner fi">
+    <span class="tag">YouTube</span>
+    <h1 class="section-title light">Dica do <em>Agrônomo</em></h1>
+    <div class="divider"></div>
+    <p style="margin-top:1rem;">Conteúdo técnico gratuito sobre pastagens, feno e gestão agropecuária — direto do campo para você.</p>
+  </div>
+</div>
+
+<!-- CANAL -->
+<section id="canal">
+  <div class="canal-inner">
+    <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="canal-thumb fi">
+      <div class="play-circle">▶</div>
+      <div class="canal-chip">@dicadoagronomo-suporterural</div>
+    </a>
+    <div class="canal-text fi delay-1">
+      <span class="tag">Canal no YouTube</span>
+      <h2 class="section-title">Conhecimento de <em>campo</em>, gratuito</h2>
+      <div class="divider"></div>
+      <p class="lead" style="margin-top:1.2rem;">No canal Dica do Agrônomo, os especialistas da Suporte Rural compartilham o que aprenderam em anos de atuação em campo — de forma direta, prática e acessível para qualquer produtor.</p>
+      <div class="canal-stats">
+        <div class="canal-stat"><strong>100+</strong><span>Vídeos publicados</span></div>
+        <div class="canal-stat"><strong>Gratuito</strong><span>Acesso livre</span></div>
+        <div class="canal-stat"><strong>Semanal</strong><span>Novos conteúdos</span></div>
+        <div class="canal-stat"><strong>Campo</strong><span>Conteúdo prático</span></div>
+      </div>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="btn btn-yt">▶ Inscrever-se no Canal</a>
+    </div>
+  </div>
+</section>
+
+<!-- TEMAS -->
+<section id="temas">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:3rem;" class="fi">
+      <span class="tag">O que você vai aprender</span>
+      <h2 class="section-title">Temas do <em>Canal</em></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="temas-grid">
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="tema-card fi">
+        <span class="tema-icon">🌱</span>
+        <h3>Formação de Pastagens</h3>
+        <p>Implantação de Tifton, Braquiária, Bermudas e outras forrageiras — preparo de solo, plantio e primeiros manejos.</p>
+        <span class="tema-link">Ver vídeos →</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="tema-card fi delay-1">
+        <span class="tema-icon">🌾</span>
+        <h3>Produção de Feno</h3>
+        <p>Ponto de corte, secagem, enfardamento, armazenamento e comercialização. Do campo ao mercado.</p>
+        <span class="tema-link">Ver vídeos →</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="tema-card fi delay-2">
+        <span class="tema-icon">🧪</span>
+        <h3>Análise e Correção de Solo</h3>
+        <p>Como interpretar laudos, calcular calcário e adubo, e montar um plano de correção eficiente.</p>
+        <span class="tema-link">Ver vídeos →</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="tema-card fi">
+        <span class="tema-icon">⚙️</span>
+        <h3>Regulagem de Equipamentos</h3>
+        <p>Pulverizador tratorizado, calcareadora, adubadora — regulagem correta para não desperdiçar insumos.</p>
+        <span class="tema-link">Ver vídeos →</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="tema-card fi delay-1">
+        <span class="tema-icon">📊</span>
+        <h3>Gestão Rural</h3>
+        <p>Indicadores de desempenho, controle de custos e como enxergar a propriedade como uma empresa lucrativa.</p>
+        <span class="tema-link">Ver vídeos →</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="tema-card fi delay-2">
+        <span class="tema-icon">🐄</span>
+        <h3>Nutrição Animal</h3>
+        <p>Suplementação estratégica, manejo do pastejo e como integrar a nutrição ao sistema forrageiro.</p>
+        <span class="tema-link">Ver vídeos →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- VÍDEOS RECENTES -->
+<section id="videos">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:3rem;" class="fi">
+      <span class="tag" style="color:var(--v-cla);">Playlist</span>
+      <h2 class="section-title light">Vídeos em <em>Destaque</em></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="videos-list fi">
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="video-row">
+        <div class="video-icon">▶</div>
+        <div><div class="video-title">Como fazer feno de qualidade: passo a passo completo</div><div class="video-tag-lbl">Produção de Feno · Suporte Rural</div></div>
+        <span class="video-arrow">→</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="video-row">
+        <div class="video-icon">▶</div>
+        <div><div class="video-title">Recuperação de pastagem degradada sem reforma</div><div class="video-tag-lbl">Manejo de Pastagens · Suporte Rural</div></div>
+        <span class="video-arrow">→</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="video-row">
+        <div class="video-icon">▶</div>
+        <div><div class="video-title">Análise de solo: como interpretar os resultados corretamente</div><div class="video-tag-lbl">Análise de Solo · Suporte Rural</div></div>
+        <span class="video-arrow">→</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="video-row">
+        <div class="video-icon">▶</div>
+        <div><div class="video-title">Adubação de pastagem: quando e quanto aplicar</div><div class="video-tag-lbl">Manejo de Pastagens · Suporte Rural</div></div>
+        <span class="video-arrow">→</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="video-row">
+        <div class="video-icon">▶</div>
+        <div><div class="video-title">Formação de Tifton 85: da muda ao primeiro corte</div><div class="video-tag-lbl">Formação de Pastagens · Suporte Rural</div></div>
+        <span class="video-arrow">→</span>
+      </a>
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="video-row">
+        <div class="video-icon">▶</div>
+        <div><div class="video-title">Regulagem de pulverizador tratorizado: erros comuns e como evitar</div><div class="video-tag-lbl">Equipamentos · Suporte Rural</div></div>
+        <span class="video-arrow">→</span>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem;" class="fi">
+      <a href="https://youtube.com/@dicadoagronomo-suporterural" target="_blank" class="btn btn-yt">▶ Ver todos os vídeos no YouTube</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-conteudo">
+  <span class="tag">Quer ir além?</span>
+  <h2>O vídeo não respondeu sua <em style="color:var(--v-pas);font-style:italic;">dúvida</em>?</h2>
+  <p>Nossa equipe técnica está disponível para orientar você diretamente sobre a sua propriedade e realidade.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="https://wa.me/5567999999999" target="_blank" class="btn btn-wa">💬 Falar no WhatsApp</a>
+    <a href="servicos.html" class="btn btn-green">Ver Serviços</a>
+  </div>
+</section>
+
+<script src="sr_shared.js"></script>
+</body>
+</html>
